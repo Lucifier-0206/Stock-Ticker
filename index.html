@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Indian Stock Market Tracker</title>
+    <title>Indian Stock Market Tracker - Real-time Stock Data</title>
+    <meta name="description" content="Track Indian stocks in real-time with our comprehensive stock market tracker. Get live prices, market data, and financial insights.">
     <link rel="stylesheet" href="css/style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <!-- Navbar -->
     <nav class="navbar">
         <div class="nav-content">
             <div class="logo">StockTracker</div>
@@ -20,48 +20,50 @@
         </div>
     </nav>
 
-    <!-- Main Content -->
     <main>
-        <div class="search-container">
+        <section class="search-container">
             <h1>Track Indian Stocks in Real-Time</h1>
             <div class="search-section">
                 <div class="search-box">
                     <div class="search-input-wrapper">
-                        <input type="text" id="stockSearch" placeholder="Search and select a company...">
+                        <input type="text" 
+                               id="stockSearch" 
+                               placeholder="Search and select a company..."
+                               autocomplete="off">
                     </div>
-                    <!-- Moved suggestions outside of input wrapper but inside search box -->
                     <div id="searchSuggestions"></div>
                 </div>
                 <div class="example-stocks">
-                    <span class="stock-tag" data-symbol="TCS.NS">TCS</span>
-                    <span class="stock-tag" data-symbol="RELIANCE.NS">Reliance</span>
-                    <span class="stock-tag" data-symbol="INFY.NS">Infosys</span>
-                    <span class="stock-tag" data-symbol="HDFCBANK.NS">HDFC Bank</span>
+                    <span class="stock-tag" data-symbol="TCS.NS" onclick="selectStock('TCS.NS')">TCS</span>
+                    <span class="stock-tag" data-symbol="RELIANCE.NS" onclick="selectStock('RELIANCE.NS')">Reliance</span>
+                    <span class="stock-tag" data-symbol="INFY.NS" onclick="selectStock('INFY.NS')">Infosys</span>
+                    <span class="stock-tag" data-symbol="HDFCBANK.NS" onclick="selectStock('HDFCBANK.NS')">HDFC Bank</span>
                 </div>
             </div>
-        </div>
+        </section>
     </main>
 
-    <!-- Footer -->
     <footer>
         <div class="footer-content">
-            <div class="footer-section">
+            <section class="footer-section">
                 <h3>StockTracker</h3>
                 <p>Real-time Indian stock market data at your fingertips</p>
-            </div>
-            <div class="footer-section">
+            </section>
+            <section class="footer-section">
                 <h4>Quick Links</h4>
-                <ul>
-                    <li><a href="#about">About Us</a></li>
-                    <li><a href="#contact">Contact</a></li>
-                    <li><a href="#terms">Terms of Service</a></li>
-                    <li><a href="#privacy">Privacy Policy</a></li>
-                </ul>
-            </div>
-            <div class="footer-section">
+                <nav>
+                    <ul>
+                        <li><a href="#about">About Us</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                        <li><a href="#terms">Terms of Service</a></li>
+                        <li><a href="#privacy">Privacy Policy</a></li>
+                    </ul>
+                </nav>
+            </section>
+            <section class="footer-section">
                 <h4>Disclaimer</h4>
                 <p>Data provided for informational purposes only. Not financial advice.</p>
-            </div>
+            </section>
         </div>
         <div class="footer-bottom">
             <p>&copy; 2025 StockTracker. All rights reserved.</p>

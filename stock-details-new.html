@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Details - StockTicker</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-content">
+            <a href="index.html" class="logo">StockTicker</a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main>
+        <div class="stock-detail-page">
+            <nav>
+                <a href="index.html" class="back-button">
+                    <span class="back-icon">←</span>
+                    <span>Back to Search</span>
+                </a>
+            </nav>
+
+            <section class="stock-detail-container">
+                <div id="loadingOverlay" class="loading-overlay">
+                    <div class="loading-spinner"></div>
+                    <span class="loading-text">Loading...</span>
+                </div>
+
+                <header class="stock-header-compact">
+                    <div class="stock-info">
+                        <h1 id="stockName">Loading...</h1>
+                        <span id="stockSymbol" class="stock-symbol"></span>
+                        <span id="exchangeName" class="exchange-name"></span>
+                        <div class="last-updated">Updated: <time id="lastUpdated">--</time></div>
+                    </div>
+                    <div class="price-info">
+                        <div class="current-price" id="currentPrice">--</div>
+                        <div id="priceChange" class="price-change">
+                            <span id="changeDirection"></span>
+                            <span id="changeAmount">--</span>
+                            <span class="separator">|</span>
+                            <span id="changePercent">--</span>
+                        </div>
+                    </div>
+                </header>
+                
+                <div class="metrics-grid">
+                    <div class="metric-item">
+                        <span class="label">Open</span>
+                        <span id="openPrice" class="value">--</span>
+                    </div>
+                    <div class="metric-item">
+                        <span class="label">Prev Close</span>
+                        <span id="prevClose" class="value">--</span>
+                    </div>
+                    <div class="metric-item">
+                        <span class="label">Day High</span>
+                        <span id="dayHigh" class="value">--</span>
+                    </div>
+                    <div class="metric-item">
+                        <span class="label">Day Low</span>
+                        <span id="dayLow" class="value">--</span>
+                    </div>
+                    <div class="metric-item">
+                        <span class="label">Volume</span>
+                        <span id="volume" class="value">--</span>
+                    </div>
+                    <div class="metric-item highlight">
+                        <span class="label">52W High</span>
+                        <span id="yearHigh" class="value">--</span>
+                    </div>
+                    <div class="metric-item highlight">
+                        <span class="label">52W Low</span>
+                        <span id="yearLow" class="value">--</span>
+                    </div>
+                    <div class="metric-item">
+                        <span class="label">Market Cap</span>
+                        <span id="marketCap" class="value">--</span>
+                    </div>
+                </div>
+
+                <div id="errorMessage" class="error-message" style="display: none;">
+                    <div class="error-icon">⚠️</div>
+                    <div class="error-content">
+                        <h3>Error Loading Data</h3>
+                        <p>Failed to load stock data. Please try again.</p>
+                        <button class="retry-button" onclick="location.reload()">Retry</button>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <script src="js/stockDetails.js"></script>
+</body>
+</html>

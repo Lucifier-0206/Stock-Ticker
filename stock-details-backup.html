@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Details - StockTicker</title>
+    <meta name="description" content="Real-time stock market data and detailed financial information">
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-content">
+            <a href="index.html" class="logo">StockTicker</a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main>
+        <div class="stock-detail-page">
+            <nav>
+                <a href="index.html" class="back-button">
+                    <span class="back-icon">←</span>
+                    <span>Back to Search</span>
+                </a>
+            </nav>
+
+            <section class="stock-detail-container">
+                <div id="loadingOverlay" class="loading-overlay">
+                    <div class="loading-spinner"></div>
+                    <span class="loading-text">Loading stock data...</span>
+                    <span class="loading-subtext">Please wait while we fetch the latest information</span>
+                </div>
+
+                <header class="stock-header-large">
+                    <div class="stock-title">
+                        <div class="title-wrapper">
+                            <h1 id="stockName">Loading...</h1>
+                            <span id="stockSymbol" class="stock-symbol-large"></span>
+                        </div>
+                        <div class="last-updated">
+                            Last Updated: <time id="lastUpdated">--</time>
+                        </div>
+                    </div>
+
+                    <div class="price-section">
+                        <h2 class="sr-only">Current Price Information</h2>
+                        <div class="current-price">
+                            <span class="label" id="price-label">Current Price</span>
+                            <span id="currentPrice" class="price">--</span>
+                        </div>
+                        <div id="priceChange" class="price-change">
+                            <span class="amount" id="price-change-info">
+                                <span id="changeDirection"></span>
+                                <span id="changeAmount">--</span>
+                            </span>
+                            <span class="separator">|</span>
+                            <span class="percent">
+                                <span id="changePercent">--</span>
+                            </span>
+                        </div>
+                    </div>
+                </header>
+                
+                <section class="metrics-section trading-info">
+                    <header class="section-header">
+                        <h2 id="trading-heading">Today's Trading Information</h2>
+                        <span class="section-subtitle">Key metrics for today's trading session</span>
+                    </header>
+                    <div id="tradingMetrics" class="stock-metrics">
+                        <!-- Trading metrics will be inserted here dynamically -->
+                    </div>
+                </section>
+
+                <section class="metrics-section">
+                    <header class="section-header">
+                        <h2 id="historical-heading">Historical Performance</h2>
+                        <span class="section-subtitle">52-week trading range and key metrics</span>
+                    </header>
+                    <div class="stock-metrics" role="grid" aria-label="Historical performance metrics">
+                        <article class="metric-card highlight tooltip" 
+                                 data-tooltip="Highest price in the last 52 weeks"
+                                 tabindex="0"
+                                 role="gridcell"
+                                 aria-labelledby="year-high-label">
+                            <div class="metric-icon" aria-hidden="true">🏆</div>
+                            <span class="label" id="year-high-label">52 Week High</span>
+                            <span id="yearHigh" class="value" aria-describedby="year-high-label">--</span>
+                            <div id="yearHighPercent" class="metric-percentage" aria-label="Percentage from current price">--</div>
+                        </article>
+                        <article class="metric-card highlight tooltip" 
+                                 data-tooltip="Lowest price in the last 52 weeks"
+                                 tabindex="0"
+                                 role="gridcell"
+                                 aria-labelledby="year-low-label">
+                            <div class="metric-icon" aria-hidden="true">�</div>
+                            <span class="label" id="year-low-label">52 Week Low</span>
+                            <span id="yearLow" class="value" aria-describedby="year-low-label">--</span>
+                            <div id="yearLowPercent" class="metric-percentage" aria-label="Percentage from current price">--</div>
+                        </article>
+                        <article class="metric-card tooltip" 
+                                 data-tooltip="Average trading volume over the last 3 months"
+                                 tabindex="0"
+                                 role="gridcell"
+                                 aria-labelledby="avg-volume-label">
+                            <div class="metric-icon" aria-hidden="true">📊</div>
+                            <span class="label" id="avg-volume-label">Average Volume (3M)</span>
+                            <span id="averageVolume" class="value" aria-describedby="avg-volume-label">--</span>
+                        </article>
+                        <article class="metric-card tooltip" 
+                                 data-tooltip="Total market value of the company's shares"
+                                 tabindex="0"
+                                 role="gridcell"
+                                 aria-labelledby="market-cap-label">
+                            <div class="metric-icon" aria-hidden="true">�</div>
+                            <span class="label" id="market-cap-label">Market Cap</span>
+                            <span id="marketCap" class="value" aria-describedby="market-cap-label">--</span>
+                        </article>
+                    </div>
+                </section>
+
+                <!-- Market Statistics Section -->
+                <section class="expandable-section" role="region" aria-labelledby="market-stats-heading">
+                    <header class="expandable-header" role="button" tabindex="0" aria-expanded="false" aria-controls="market-stats-content">
+                        <h2 id="market-stats-heading">Market Statistics</h2>
+                        <div class="expandable-toggle" aria-hidden="true">▼</div>
+                    </header>
+                    <div id="market-stats-content" class="expandable-content" role="region" aria-labelledby="market-stats-heading">
+                        <div class="expandable-content-inner">
+                            <div class="stock-metrics" role="grid" aria-label="Market statistics">
+                                <article class="metric-card tooltip interactive" 
+                                         data-tooltip="Total market value of the company"
+                                         tabindex="0" role="gridcell">
+                                    <div class="metric-icon" aria-hidden="true">�</div>
+                                    <span class="label">Market Cap</span>
+                                    <span id="marketCapAlt" class="value">--</span>
+                                </article>
+                                <article class="metric-card tooltip interactive" 
+                                         data-tooltip="Number of shares traded today"
+                                         tabindex="0" role="gridcell">
+                                    <div class="metric-icon" aria-hidden="true">�</div>
+                                    <span class="label">Volume</span>
+                                    <span id="volume" class="value">--</span>
+                                </article>
+                                <article class="metric-card tooltip interactive" 
+                                         data-tooltip="Average daily trading volume over 3 months"
+                                         tabindex="0" role="gridcell">
+                                    <div class="metric-icon" aria-hidden="true">�</div>
+                                    <span class="label">Avg. Volume (3M)</span>
+                                    <span id="averageVolumeAlt" class="value">--</span>
+                                </article>
+                                <article class="metric-card tooltip interactive" 
+                                         data-tooltip="Measure of stock's volatility relative to market"
+                                         tabindex="0" role="gridcell">
+                                    <div class="metric-icon" aria-hidden="true">📉</div>
+                                    <span class="label">Beta</span>
+                                    <span id="beta" class="value">--</span>
+                                </article>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Error Message with retry functionality -->
+                <div id="errorMessage" 
+                     class="error-message" 
+                     style="display: none;" 
+                     role="alert" 
+                     aria-live="assertive">
+                    <div class="error-icon" aria-hidden="true">⚠️</div>
+                    <div class="error-content">
+                        <h3>Error Loading Data</h3>
+                        <p>Failed to load stock data. Please check your connection and try again.</p>
+                        <button class="retry-button" onclick="location.reload()" aria-label="Retry loading stock data">
+                            Retry
+                        </button>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <script src="js/stockDetails.js"></script>
+</body>
+</html>

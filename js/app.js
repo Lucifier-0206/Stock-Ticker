@@ -183,11 +183,17 @@ searchSuggestions.addEventListener('click', (e) => {
     }
 });
 
+// Select stock function for quick tags
+function selectStock(symbol) {
+    if (symbol) {
+        window.location.href = `stock-details.html?symbol=${encodeURIComponent(symbol)}`;
+    }
+}
+
 stockTags.forEach(tag => {
     tag.addEventListener('click', () => {
         const symbol = tag.getAttribute('data-symbol');
-        // Navigate to the stock details page
-        window.location.href = `stock-details.html?symbol=${encodeURIComponent(symbol)}`;
+        selectStock(symbol);
     });
 });
 

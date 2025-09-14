@@ -8,8 +8,30 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
     }
 
+    // Initialize interactive features
+    initializeInteractiveFeatures();
+    
     fetchStockDetails(symbol);
 });
+
+// Interactive features initialization
+function initializeInteractiveFeatures() {
+    // Expandable sections
+    initializeExpandableSections();
+}
+
+// Initialize expandable sections
+function initializeExpandableSections() {
+    document.querySelectorAll('.expandable-header').forEach(header => {
+        header.addEventListener('click', toggleExpandableSection);
+    });
+}
+
+// Toggle expandable sections
+function toggleExpandableSection(e) {
+    const section = this.parentElement;
+    section.classList.toggle('expanded');
+}
 
 async function fetchStockDetails(symbol) {
     try {
@@ -146,8 +168,17 @@ function updateUI(stockData, quote, meta) {
 
         // Update basic info
         const stockName = meta.longName || meta.shortName || meta.symbol?.replace('.NS', '') || 'Stock Details';
+        const exchangeInfo = meta.fullExchangeName || meta.exchangeName || 'NSE';
+        
         document.getElementById('stockName').textContent = stockName;
         document.getElementById('stockSymbol').textContent = meta.symbol?.replace('.NS', '') || '--';
+        
+        // Add exchange name if element exists
+        const exchangeElement = document.getElementById('exchangeName');
+        if (exchangeElement) {
+            exchangeElement.textContent = exchangeInfo;
+        }
+        
         document.title = `${stockName} - Stock Details`;
 
         // Update last updated time
@@ -224,6 +255,13 @@ function updateUI(stockData, quote, meta) {
                 tooltip: 'Lowest price today'
             },
             {
+                id: 'volume',
+                icon: '📊',
+                value: meta.regularMarketVolume,
+                label: 'Volume',
+                tooltip: 'Number of shares traded today'
+            },
+            {
                 id: 'yearHigh',
                 icon: '🏆',
                 value: meta.fiftyTwoWeekHigh,
@@ -267,15 +305,15 @@ function updateUI(stockData, quote, meta) {
             metricCard.appendChild(icon);
 
             const label = document.createElement('div');
-            label.className = 'metric-label';
+            label.className = 'label';
             label.textContent = metric.label;
             metricCard.appendChild(label);
 
             const valueContainer = document.createElement('div');
-            valueContainer.className = 'metric-value-container';
+            valueContainer.className = 'value-container';
             
             const value = document.createElement('div');
-            value.className = 'metric-value';
+            value.className = 'value';
             value.textContent = safeNumber(metric.value);
             valueContainer.appendChild(value);
 
@@ -294,11 +332,23 @@ function updateUI(stockData, quote, meta) {
             metricsContainer.appendChild(metricCard);
         });
 
-        // Market Statistics
-        updateElement('marketCap', formatLargeNumber(meta.marketCap));
-        updateElement('volume', formatLargeNumber(meta.regularMarketVolume));
-        updateElement('averageVolume', formatLargeNumber(meta.averageDailyVolume3Month));
-        updateElement('beta', meta.beta?.toFixed(2));
+        // Market Statistics (only if elements exist)
+        const marketCapElement = document.getElementById('marketCap');
+        if (marketCapElement) {
+            updateElement('marketCap', formatLargeNumber(meta.marketCap));
+        }
+        const volumeElement = document.getElementById('volume');
+        if (volumeElement) {
+            updateElement('volume', formatLargeNumber(meta.regularMarketVolume));
+        }
+        const averageVolumeElement = document.getElementById('averageVolume');
+        if (averageVolumeElement) {
+            updateElement('averageVolume', formatLargeNumber(meta.averageDailyVolume3Month));
+        }
+        const betaElement = document.getElementById('beta');
+        if (betaElement) {
+            updateElement('beta', meta.beta?.toFixed(2));
+        }
 
         // Financial Ratios
         updateElement('peRatio', meta.trailingPE?.toFixed(2));
