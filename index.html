@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Indian Stock Market Tracker</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="nav-content">
+            <div class="logo">StockTracker</div>
+            <ul class="nav-links">
+                <li><a href="#" class="active">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main>
+        <div class="search-container">
+            <h1>Track Indian Stocks in Real-Time</h1>
+            <div class="search-box">
+                <input type="text" id="stockSearch" placeholder="Search for stocks...">
+                <button id="searchBtn">Search</button>
+            </div>
+            <div class="example-stocks">
+                <p>Popular stocks: </p>
+                <span class="stock-tag" data-symbol="TCS">TCS</span>
+                <span class="stock-tag" data-symbol="RELIANCE">Reliance</span>
+                <span class="stock-tag" data-symbol="INFY">Infosys</span>
+                <span class="stock-tag" data-symbol="HDFCBANK">HDFC Bank</span>
+            </div>
+        </div>
+
+        <div id="stockResults" class="stock-results"></div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>StockTracker</h3>
+                <p>Real-time Indian stock market data at your fingertips</p>
+            </div>
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="#about">About Us</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                    <li><a href="#terms">Terms of Service</a></li>
+                    <li><a href="#privacy">Privacy Policy</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Disclaimer</h4>
+                <p>Data provided for informational purposes only. Not financial advice.</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 StockTracker. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="js/app.js"></script>
+</body>
+</html>
