@@ -24,16 +24,21 @@
     <main>
         <div class="search-container">
             <h1>Track Indian Stocks in Real-Time</h1>
-            <div class="search-box">
-                <input type="text" id="stockSearch" placeholder="Search for stocks...">
-                <button id="searchBtn">Search</button>
-            </div>
-            <div class="example-stocks">
-                <p>Popular stocks: </p>
-                <span class="stock-tag" data-symbol="TCS">TCS</span>
-                <span class="stock-tag" data-symbol="RELIANCE">Reliance</span>
-                <span class="stock-tag" data-symbol="INFY">Infosys</span>
-                <span class="stock-tag" data-symbol="HDFCBANK">HDFC Bank</span>
+            <div class="search-section">
+                <div class="search-box">
+                    <div class="search-input-wrapper">
+                        <input type="text" id="stockSearch" placeholder="Search by company name or symbol...">
+                        <button id="searchBtn">Search</button>
+                    </div>
+                    <!-- Moved suggestions outside of input wrapper but inside search box -->
+                    <div id="searchSuggestions"></div>
+                </div>
+                <div class="example-stocks">
+                    <span class="stock-tag" data-symbol="TCS.NS">TCS</span>
+                    <span class="stock-tag" data-symbol="RELIANCE.NS">Reliance</span>
+                    <span class="stock-tag" data-symbol="INFY.NS">Infosys</span>
+                    <span class="stock-tag" data-symbol="HDFCBANK.NS">HDFC Bank</span>
+                </div>
             </div>
         </div>
 
@@ -66,6 +71,7 @@
         </div>
     </footer>
 
+    <script src="js/stockSymbols.js"></script>
     <script src="js/app.js"></script>
 </body>
 </html>

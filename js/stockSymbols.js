@@ -1,23 +1,41 @@
-// Common Indian Stock Symbols with their company names
-const stockSymbols = [
+// Base symbols for quick access
+const baseStockSymbols = [
     { symbol: 'RELIANCE.NS', name: 'Reliance Industries Ltd' },
     { symbol: 'TCS.NS', name: 'Tata Consultancy Services Ltd' },
     { symbol: 'HDFCBANK.NS', name: 'HDFC Bank Ltd' },
-    { symbol: 'INFY.NS', name: 'Infosys Ltd' },
-    { symbol: 'ICICIBANK.NS', name: 'ICICI Bank Ltd' },
-    { symbol: 'HINDUNILVR.NS', name: 'Hindustan Unilever Ltd' },
-    { symbol: 'SBIN.NS', name: 'State Bank of India' },
-    { symbol: 'HDFC.NS', name: 'Housing Development Finance Corp' },
-    { symbol: 'BHARTIARTL.NS', name: 'Bharti Airtel Ltd' },
-    { symbol: 'KOTAKBANK.NS', name: 'Kotak Mahindra Bank Ltd' },
-    { symbol: 'WIPRO.NS', name: 'Wipro Ltd' },
-    { symbol: 'MARUTI.NS', name: 'Maruti Suzuki India Ltd' },
-    { symbol: 'LT.NS', name: 'Larsen & Toubro Ltd' },
-    { symbol: 'ITC.NS', name: 'ITC Ltd' },
-    { symbol: 'AXISBANK.NS', name: 'Axis Bank Ltd' },
-    { symbol: 'ASIANPAINT.NS', name: 'Asian Paints Ltd' },
-    { symbol: 'HCLTECH.NS', name: 'HCL Technologies Ltd' },
-    { symbol: 'TATASTEEL.NS', name: 'Tata Steel Ltd' },
-    { symbol: 'BAJFINANCE.NS', name: 'Bajaj Finance Ltd' },
-    { symbol: 'TATAMOTORS.NS', name: 'Tata Motors Ltd' }
+    { symbol: 'INFY.NS', name: 'Infosys Ltd' }
 ];
+
+// Function to search for stocks using Yahoo Finance API
+async function searchStocks(query) {
+    if (!query || query.length < 2) return [];
+    
+    try {
+        // Format the URL for the Yahoo Finance search API
+        const searchUrl = `https://query1.finance.yahoo.com/v1/finance/search?q=${encodeURIComponent(query)}&quotesCount=6&newsCount=0&enableFuzzyQuery=false&quotesQueryId=tss_match_phrase_query&multiQuoteQueryId=multi_quote_single_token_query&enableCb=true&region=IN`;
+        
+        // Use the CORS proxy
+        const proxyUrl = `${CORS_PROXY}${encodeURIComponent(searchUrl)}`;
+        
+        const response = await fetch(proxyUrl);
+        if (!response.ok) throw new Error('Search request failed');
+        
+        const data = await response.json();
+        
+        // Filter and format the results
+        const results = data.quotes
+            .filter(quote => quote.exchange === 'NSI') // Only Indian stocks
+            .map(quote => ({
+                symbol: quote.symbol,
+                name: quote.longname || quote.shortname || quote.symbol
+            }));
+            
+        return results;
+    } catch (error) {
+        console.error('Error searching stocks:', error);
+        return baseStockSymbols.filter(stock => 
+            stock.name.toLowerCase().includes(query.toLowerCase()) || 
+            stock.symbol.toLowerCase().includes(query.toLowerCase())
+        );
+    }
+}
