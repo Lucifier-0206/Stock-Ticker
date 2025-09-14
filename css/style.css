@@ -163,21 +163,17 @@ main {
 }
 
 #stockSearch {
-    flex: 1;
-    padding: 1rem 1rem 1rem 3rem;
+    width: 100%;
+    padding: 1.25rem 1.5rem 1.25rem 3.5rem;
     border: 2px solid rgba(255, 255, 255, 0.2);
     border-radius: 100px;
-    font-size: 1.1rem;
+    font-size: 1.2rem;
     background: rgba(255, 255, 255, 0.95);
     color: var(--text-primary);
     outline: none;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
     position: relative;
-}
-
-#stockSearch + #searchBtn {
-    min-width: 120px;
 }
 
 .search-input-wrapper::before {
@@ -197,15 +193,20 @@ main {
     top: 100%;
     left: 0;
     right: 0;
-    background: var(--white);
-    border: 1px solid var(--gray-light);
-    border-radius: 8px;
-    margin-top: 0.5rem;
-    max-height: 300px;
+    background: rgba(255, 255, 255, 0.98);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 16px;
+    margin-top: 0.75rem;
+    max-height: 350px;
     overflow-y: auto;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: 
+        0 4px 20px rgba(0, 0, 0, 0.1),
+        0 8px 16px rgba(0, 0, 0, 0.1),
+        0 16px 32px rgba(0, 0, 0, 0.15);
     z-index: 1000;
     display: none;
+    backdrop-filter: blur(12px);
+    padding: 0.5rem;
 }
 
 .search-suggestions.active {
@@ -213,13 +214,16 @@ main {
 }
 
 .suggestion-item {
-    padding: 0.75rem 1rem;
+    padding: 1rem 1.5rem;
     cursor: pointer;
-    transition: background-color 0.2s ease;
+    transition: all 0.2s ease;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 1px solid var(--gray-light);
+    border-radius: 12px;
+    margin: 0.25rem;
+    background: var(--surface-color);
+    border: 1px solid transparent;
 }
 
 .suggestion-item:last-child {
@@ -227,7 +231,10 @@ main {
 }
 
 .suggestion-item:hover {
-    background-color: var(--gray-light);
+    background-color: var(--gray-50);
+    transform: translateX(5px);
+    border-color: var(--primary-light);
+    box-shadow: var(--shadow-sm);
 }
 
 .suggestion-item .company-name {
@@ -757,14 +764,26 @@ main {
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(255, 255, 255, 0.9);
+    background: rgba(255, 255, 255, 0.95);
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     gap: 1rem;
     z-index: 100;
-    backdrop-filter: blur(4px);
+    backdrop-filter: blur(8px);
+}
+
+.loading-text {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.loading-subtext {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    opacity: 0.8;
 }
 
 .loading-spinner {
@@ -782,48 +801,48 @@ main {
 
 /* Stock Header */
 .stock-header-large {
-    margin-bottom: 2rem;
-    padding-bottom: 2rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1.5rem;
     border-bottom: 1px solid var(--gray-200);
     background: linear-gradient(to right, var(--surface-color), var(--gray-50));
-    margin: -2rem -2rem 2rem -2rem;
-    padding: 2rem;
+    margin: -2rem -2rem 1.5rem -2rem;
+    padding: 1.5rem;
 }
 
 .stock-title {
     display: flex;
     justify-content: space-between;
-    align-items: flex-start;
-    margin-bottom: 1.5rem;
+    align-items: center;
+    margin-bottom: 1rem;
 }
 
 .title-wrapper {
     display: flex;
     align-items: center;
-    gap: 1rem;
+    gap: 0.75rem;
 }
 
 .stock-title h1 {
-    font-size: 2.5rem;
+    font-size: 2rem;
     color: var(--text-primary);
     margin: 0;
-    font-weight: 800;
+    font-weight: 700;
 }
 
 .last-updated {
-    font-size: 0.9rem;
+    font-size: 0.8rem;
     color: var(--text-secondary);
     background: var(--surface-color);
-    padding: 0.5rem 1rem;
+    padding: 0.4rem 0.8rem;
     border-radius: 100px;
     border: 1px solid var(--gray-200);
 }
 
 .stock-symbol-large {
-    font-size: 1.2rem;
-    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    padding: 0.4rem 0.8rem;
     background: var(--primary-color);
-    border-radius: 8px;
+    border-radius: 6px;
     color: white;
     font-weight: 600;
 }
@@ -856,14 +875,28 @@ main {
 }
 
 .price-change {
-    display: flex;
+    display: inline-flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.75rem;
     padding: 1rem 1.5rem;
     border-radius: 12px;
-    font-weight: 600;
+    font-weight: 700;
     font-size: 1.2rem;
     transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    margin-left: 1rem;
+}
+
+.price-change .amount,
+.price-change .percent {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.price-change .separator {
+    color: rgba(0, 0, 0, 0.2);
+    margin: 0 0.25rem;
 }
 
 .price-change.positive {
@@ -891,33 +924,67 @@ main {
     margin-bottom: 0;
 }
 
+.section-header {
+    margin-bottom: 1.5rem;
+}
+
 .metrics-section h2 {
     font-size: 1.5rem;
     color: var(--text-primary);
-    margin-bottom: 1.5rem;
+    margin-bottom: 0.5rem;
     font-weight: 700;
+}
+
+.section-subtitle {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    display: block;
 }
 
 .stock-metrics {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.25rem;
+    padding: 0.5rem;
 }
 
 .metric-card {
     background: var(--surface-color);
-    padding: 1.5rem;
+    padding: 1.25rem;
     border-radius: 16px;
     border: 1px solid var(--gray-200);
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
     transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
 }
 
 .metric-card:hover {
     transform: translateY(-2px);
     box-shadow: var(--shadow-md);
+    border-color: var(--primary-light);
+}
+
+.metric-card:hover .metric-icon {
+    transform: scale(1.1);
+}
+
+.metric-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(to right, var(--primary-light), var(--secondary-light));
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.metric-card:hover::before {
+    opacity: 1;
 }
 
 .metric-card.wide {
@@ -934,21 +1001,80 @@ main {
     color: white;
 }
 
+.metric-card .metrics-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin: 1rem 0;
+}
+
 .metric-icon {
-    font-size: 1.5rem;
+    font-size: 1.4rem;
     margin-bottom: 0.5rem;
+    transition: transform 0.3s ease;
 }
 
 .metric-card .label {
     font-size: 0.9rem;
     color: var(--text-secondary);
     font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.metric-value-container {
+    display: flex;
+    align-items: baseline;
+    gap: 0.75rem;
+    margin-top: 0.25rem;
 }
 
 .metric-card .value {
-    font-size: 1.5rem;
+    font-size: 1.4rem;
     font-weight: 700;
     color: var(--text-primary);
+    letter-spacing: -0.02em;
+}
+
+.metric-card .percentage {
+    font-size: 0.85rem;
+    padding: 0.3rem 0.7rem;
+    border-radius: 6px;
+    font-weight: 600;
+    display: inline-block;
+    margin-top: 0.3rem;
+    letter-spacing: 0.02em;
+}
+
+.metric-card .percentage.positive {
+    color: var(--success-color);
+    background: rgba(34, 197, 94, 0.1);
+    border: 1px solid rgba(34, 197, 94, 0.2);
+}
+
+.metric-card .percentage.negative {
+    color: var(--danger-color);
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+.metric-card .percentage::before {
+    content: '';
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    margin-right: 4px;
+    position: relative;
+    top: -1px;
+}
+
+.metric-card .percentage.positive::before {
+    background-color: var(--success-color);
+}
+
+.metric-card .percentage.negative::before {
+    background-color: var(--danger-color);
 }
 
 .metric-card .value.link {

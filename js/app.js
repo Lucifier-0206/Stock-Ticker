@@ -4,8 +4,6 @@ const YAHOO_FINANCE_API = 'https://query1.finance.yahoo.com/v8/finance/chart/';
 
 // DOM Elements
 const stockSearch = document.getElementById('stockSearch');
-const searchBtn = document.getElementById('searchBtn');
-const stockResults = document.getElementById('stockResults');
 const searchSuggestions = document.getElementById('searchSuggestions');
 const stockTags = document.querySelectorAll('.stock-tag');
 
@@ -101,122 +99,22 @@ async function fetchStockData(symbol) {
     }
 }
 
-function createStockCard(stockData) {
-    try {
-        const { meta, indicators } = stockData;
-        
-        if (!meta || !indicators?.quote?.[0]) {
-            throw new Error('Invalid stock data format');
-        }
 
-        const quote = indicators.quote[0];
-        const timestamp = stockData.timestamp || [];
-        const lastIndex = timestamp.length - 1;
-
-        // Ensure we have valid price data
-        const currentPrice = meta.regularMarketPrice || meta.currentPrice || 
-            (quote.close && quote.close[lastIndex]) || 0;
-        const previousClose = meta.previousClose || meta.chartPreviousClose || 
-            (quote.close && quote.close[0]) || currentPrice;
-
-        // Calculate changes safely
-        const change = meta.regularMarketChange || (currentPrice - previousClose) || 0;
-        const changePercent = meta.regularMarketChangePercent || 
-            ((currentPrice !== 0 && previousClose !== 0) ? ((change / previousClose) * 100) : 0);
-
-        // Calculate day range safely
-        const validHighs = quote.high?.filter(h => h !== null && !isNaN(h)) || [];
-        const validLows = quote.low?.filter(l => l !== null && !isNaN(l)) || [];
-        const dayHigh = validHighs.length > 0 ? Math.max(...validHighs) : currentPrice;
-        const dayLow = validLows.length > 0 ? Math.min(...validLows) : currentPrice;
-
-        // Format values safely
-        const formatNumber = (num) => {
-            return isNaN(num) ? '0.00' : num.toFixed(2);
-        };
-
-        const formatLargeNumber = (num) => {
-            if (!num || isNaN(num)) return '0';
-            if (num >= 10000000) return (num / 10000000).toFixed(2) + ' Cr';
-            if (num >= 100000) return (num / 100000).toFixed(2) + ' L';
-            return num.toLocaleString('en-IN');
-        };
-
-        const card = document.createElement('div');
-        card.className = 'stock-card';
-        
-        card.innerHTML = `
-            <div class="stock-header">
-                <span class="stock-name">${meta.symbol.replace('.NS', '')}</span>
-                <span class="stock-symbol">${meta.exchangeName || 'NSE'}</span>
-            </div>
-            <div class="stock-price">₹${formatNumber(currentPrice)}</div>
-            <div class="stock-change ${change >= 0 ? 'positive' : 'negative'}">
-                ${change >= 0 ? '▲' : '▼'} ₹${formatNumber(Math.abs(change))} (${formatNumber(Math.abs(changePercent))}%)
-            </div>
-            <div class="stock-details">
-                <div class="detail-item">
-                    <span class="detail-label">Day's Range</span>
-                    <span class="detail-value">₹${formatNumber(dayLow)} - ₹${formatNumber(dayHigh)}</span>
-                </div>
-                <div class="detail-item">
-                    <span class="detail-label">Volume</span>
-                    <span class="detail-value">${formatLargeNumber(quote.volume?.[lastIndex])}</span>
-                </div>
-                <div class="detail-item">
-                    <span class="detail-label">Last Updated</span>
-                    <span class="detail-value">${meta.regularMarketTime ? 
-                        new Date(meta.regularMarketTime * 1000).toLocaleTimeString('en-IN') : 
-                        'Not available'}</span>
-                </div>
-            </div>
-        `;
-        
-        return card;
-    } catch (error) {
-        console.error('Error creating stock card:', error);
-        const errorCard = document.createElement('div');
-        errorCard.className = 'error-message';
-        errorCard.textContent = 'Error displaying stock data: ' + error.message;
-        return errorCard;
-    }
-    
-
-}
 
 const handleSearch = debounce(async function(searchSymbol) {
     const symbol = searchSymbol || stockSearch.value.trim();
     if (!symbol) return;
 
-    // Show loading state
-    stockResults.innerHTML = '<div class="loading">Loading stock data...</div>';
+    // Format symbol for NSE
+    const formattedSymbol = symbol.toUpperCase().trim()
+        .replace(/[^\w.]/g, '') // Remove any special characters
+        .replace(/\.NS\.NS$/, '.NS') // Fix double .NS
+        .replace(/^\.NS/, '') // Remove leading .NS
+        .replace(/\.NS$/, '') // Remove .NS to add it properly
+        + '.NS';
 
-    try {
-        console.log('Searching for symbol:', symbol);
-        const stockData = await fetchStockData(symbol);
-        
-        // Clear previous results
-        stockResults.innerHTML = '';
-        
-        // Create and append new stock card
-        const stockCard = createStockCard(stockData);
-        stockResults.appendChild(stockCard);
-        
-        // Set up real-time updates
-        setUpRealTimeUpdates(symbol);
-    } catch (error) {
-        console.error('Search error:', error);
-        let errorMessage = `Could not find stock data for "${symbol}". Please check the symbol and try again.`;
-        if (error.message.includes('Failed to fetch')) {
-            errorMessage = `Unable to fetch data for "${symbol}". This might be because the market is currently closed or the stock symbol is incorrect.`;
-        }
-        stockResults.innerHTML = `
-            <div class="error-message">
-                ${errorMessage}<br>
-                <small>Last attempt: ${new Date().toLocaleTimeString('en-IN')}</small>
-            </div>
-        `;
-    }
+    // Navigate to the stock details page
+    window.location.href = `stock-details.html?symbol=${encodeURIComponent(formattedSymbol)}`;
 }, 500); // Wait 500ms between searches
 
 // Search Functions
@@ -238,14 +136,7 @@ function showSuggestions(suggestions) {
     searchSuggestions.classList.add('active');
 }
 
-// Event Listeners
-searchBtn.addEventListener('click', () => {
-    if (selectedStock) {
-        handleSearch(selectedStock.symbol);
-    } else {
-        handleSearch(stockSearch.value);
-    }
-});
+// Search now happens only through suggestions and stock tags
 
 // Debounced search handler for input changes
 const handleSearchInput = debounce(async function(query) {
@@ -273,15 +164,7 @@ stockSearch.addEventListener('input', function(e) {
     handleSearchInput(query);
 });
 
-stockSearch.addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') {
-        if (selectedStock) {
-            handleSearch(selectedStock.symbol);
-        } else {
-            handleSearch(stockSearch.value);
-        }
-    }
-});
+// Enter key disabled - use search button or click suggestions instead
 
 // Hide suggestions when clicking outside
 document.addEventListener('click', (e) => {
@@ -308,79 +191,4 @@ stockTags.forEach(tag => {
     });
 });
 
-// Keep track of the current update interval
-let currentUpdateInterval = null;
 
-function setUpRealTimeUpdates(symbol) {
-    // Clear any existing interval
-    if (currentUpdateInterval) {
-        clearInterval(currentUpdateInterval);
-        currentUpdateInterval = null;
-    }
-
-    let failedAttempts = 0;
-    const maxFailedAttempts = 3;
-
-    async function updateStockData() {
-        try {
-            if (!document.hasFocus()) {
-                console.log('Tab not focused, skipping update');
-                return;
-            }
-
-            const stockData = await fetchStockData(symbol);
-            const updatedCard = createStockCard(stockData);
-            
-            // Replace existing card with updated data
-            if (stockResults.firstChild) {
-                stockResults.replaceChild(updatedCard, stockResults.firstChild);
-            }
-
-            // Reset failed attempts on success
-            failedAttempts = 0;
-
-            // Add last update timestamp
-            const timestamp = document.createElement('div');
-            timestamp.className = 'update-timestamp';
-            timestamp.textContent = `Last updated: ${new Date().toLocaleTimeString('en-IN')}`;
-            updatedCard.appendChild(timestamp);
-
-        } catch (error) {
-            console.error('Error updating stock data:', error);
-            failedAttempts++;
-
-            if (failedAttempts >= maxFailedAttempts) {
-                console.error('Too many failed attempts, stopping updates');
-                clearInterval(currentUpdateInterval);
-                currentUpdateInterval = null;
-
-                // Show error message in the card
-                const errorMsg = document.createElement('div');
-                errorMsg.className = 'error-message';
-                errorMsg.textContent = 'Real-time updates paused. Please refresh the page to resume.';
-                stockResults.firstChild?.appendChild(errorMsg);
-            }
-        }
-    }
-
-    // Initial update
-    updateStockData();
-
-    // Update stock data every 30 seconds
-    currentUpdateInterval = setInterval(updateStockData, 30000);
-
-    // Clean up interval when user starts a new search
-    function cleanupInterval() {
-        if (currentUpdateInterval) {
-            clearInterval(currentUpdateInterval);
-            currentUpdateInterval = null;
-        }
-        // Remove event listeners
-        stockSearch.removeEventListener('focus', cleanupInterval);
-        window.removeEventListener('beforeunload', cleanupInterval);
-    }
-
-    // Add cleanup listeners
-    stockSearch.addEventListener('focus', cleanupInterval, { once: true });
-    window.addEventListener('beforeunload', cleanupInterval, { once: true });
-}

@@ -29,7 +29,8 @@
                 <!-- Loading overlay -->
                 <div id="loadingOverlay" class="loading-overlay">
                     <div class="loading-spinner"></div>
-                    <span>Loading stock data...</span>
+                    <span class="loading-text">Loading stock data...</span>
+                    <span class="loading-subtext">Please wait while we fetch the latest information</span>
                 </div>
 
                 <!-- Stock Header Section -->
@@ -50,52 +51,57 @@
                             <span id="currentPrice" class="price">--</span>
                         </div>
                         <div id="priceChange" class="price-change">
-                            <span id="changeAmount">--</span>
-                            <span id="changePercent">--</span>
+                            <span class="amount">
+                                <span id="changeDirection"></span>
+                                <span id="changeAmount">--</span>
+                            </span>
+                            <span class="separator">|</span>
+                            <span class="percent">
+                                <span id="changePercent">--</span>
+                            </span>
                         </div>
                     </div>
                 </div>
                 
                 <!-- Main Metrics Grid -->
-                <div class="metrics-section">
-                    <h2>Today's Trading Information</h2>
-                    <div class="stock-metrics">
-                        <div class="metric-card">
-                            <div class="metric-icon">📈</div>
-                            <span class="label">Open</span>
-                            <span id="openPrice" class="value">--</span>
-                        </div>
-                        <div class="metric-card">
-                            <div class="metric-icon">🔄</div>
-                            <span class="label">Previous Close</span>
-                            <span id="prevClose" class="value">--</span>
-                        </div>
-                        <div class="metric-card">
-                            <div class="metric-icon">⬆️</div>
-                            <span class="label">Day's High</span>
-                            <span id="dayHigh" class="value">--</span>
-                        </div>
-                        <div class="metric-card">
-                            <div class="metric-icon">⬇️</div>
-                            <span class="label">Day's Low</span>
-                            <span id="dayLow" class="value">--</span>
-                        </div>
+                <div class="metrics-section trading-info">
+                    <div class="section-header">
+                        <h2>Today's Trading Information</h2>
+                        <span class="section-subtitle">Key metrics for today's trading session</span>
+                    </div>
+                    <div id="tradingMetrics" class="stock-metrics">
+                        <!-- Trading metrics will be inserted here dynamically -->
                     </div>
                 </div>
 
                 <!-- Historical Metrics Section -->
                 <div class="metrics-section">
-                    <h2>Historical Performance</h2>
+                    <div class="section-header">
+                        <h2>Historical Performance</h2>
+                        <span class="section-subtitle">52-week trading range and key metrics</span>
+                    </div>
                     <div class="stock-metrics">
                         <div class="metric-card highlight">
                             <div class="metric-icon">🏆</div>
                             <span class="label">52 Week High</span>
                             <span id="yearHigh" class="value">--</span>
+                            <div id="yearHighPercent" class="metric-percentage">--</div>
                         </div>
                         <div class="metric-card highlight">
                             <div class="metric-icon">📉</div>
                             <span class="label">52 Week Low</span>
                             <span id="yearLow" class="value">--</span>
+                            <div id="yearLowPercent" class="metric-percentage">--</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-icon">📊</div>
+                            <span class="label">Average Volume (3M)</span>
+                            <span id="averageVolume" class="value">--</span>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-icon">📈</div>
+                            <span class="label">Market Cap</span>
+                            <span id="marketCap" class="value">--</span>
                         </div>
                     </div>
                 </div>
