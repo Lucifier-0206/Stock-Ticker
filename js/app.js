@@ -295,22 +295,16 @@ searchSuggestions.addEventListener('click', (e) => {
     const suggestionItem = e.target.closest('.suggestion-item');
     if (suggestionItem) {
         const symbol = suggestionItem.dataset.symbol;
-        const name = suggestionItem.querySelector('.company-name').textContent;
-        selectedStock = { symbol: symbol, name: name };
-        stockSearch.value = name;
-        searchSuggestions.classList.remove('active');
-        handleSearch(symbol);
+        // Navigate to the stock details page
+        window.location.href = `stock-details.html?symbol=${encodeURIComponent(symbol)}`;
     }
 });
 
 stockTags.forEach(tag => {
     tag.addEventListener('click', () => {
         const symbol = tag.getAttribute('data-symbol');
-        const stockInfo = baseStockSymbols.find(s => s.symbol === symbol) || 
-            { symbol: symbol, name: symbol.replace('.NS', '') };
-        selectedStock = stockInfo;
-        stockSearch.value = stockInfo.name;
-        handleSearch(symbol);
+        // Navigate to the stock details page
+        window.location.href = `stock-details.html?symbol=${encodeURIComponent(symbol)}`;
     });
 });
 

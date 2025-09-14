@@ -706,6 +706,332 @@ main {
     content: '▼';
 }
 
+/* Stock Detail Page Styles */
+.stock-detail-page {
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    position: relative;
+}
+
+.back-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.25rem;
+    background: var(--surface-color);
+    border-radius: 100px;
+    text-decoration: none;
+    color: var(--text-primary);
+    font-weight: 500;
+    margin-bottom: 1.5rem;
+    transition: all 0.3s ease;
+    border: 1px solid var(--gray-200);
+}
+
+.back-button:hover {
+    transform: translateX(-5px);
+    background: var(--gray-50);
+    box-shadow: var(--shadow-md);
+}
+
+.back-button .back-icon {
+    font-size: 1.2rem;
+    line-height: 1;
+}
+
+.stock-detail-container {
+    background: var(--surface-color);
+    border-radius: 24px;
+    padding: 2rem;
+    box-shadow: var(--shadow-lg);
+    border: 1px solid var(--gray-200);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Loading Overlay */
+.loading-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.9);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    z-index: 100;
+    backdrop-filter: blur(4px);
+}
+
+.loading-spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid var(--gray-200);
+    border-top-color: var(--primary-color);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Stock Header */
+.stock-header-large {
+    margin-bottom: 2rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid var(--gray-200);
+    background: linear-gradient(to right, var(--surface-color), var(--gray-50));
+    margin: -2rem -2rem 2rem -2rem;
+    padding: 2rem;
+}
+
+.stock-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1.5rem;
+}
+
+.title-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.stock-title h1 {
+    font-size: 2.5rem;
+    color: var(--text-primary);
+    margin: 0;
+    font-weight: 800;
+}
+
+.last-updated {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    background: var(--surface-color);
+    padding: 0.5rem 1rem;
+    border-radius: 100px;
+    border: 1px solid var(--gray-200);
+}
+
+.stock-symbol-large {
+    font-size: 1.2rem;
+    padding: 0.5rem 1rem;
+    background: var(--primary-color);
+    border-radius: 8px;
+    color: white;
+    font-weight: 600;
+}
+
+/* Price Section */
+.price-section {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.current-price {
+    display: flex;
+    flex-direction: column;
+}
+
+.current-price .label {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+}
+
+.current-price .price {
+    font-size: 3.5rem;
+    font-weight: 800;
+    color: var(--text-primary);
+    letter-spacing: -0.02em;
+}
+
+.price-change {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1rem 1.5rem;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 1.2rem;
+    transition: all 0.3s ease;
+}
+
+.price-change.positive {
+    background: rgba(34, 197, 94, 0.1);
+    color: var(--success-color);
+    border: 1px solid rgba(34, 197, 94, 0.2);
+}
+
+.price-change.negative {
+    background: rgba(239, 68, 68, 0.1);
+    color: var(--danger-color);
+    border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+/* Metrics Section */
+.metrics-section {
+    margin-bottom: 2rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid var(--gray-200);
+}
+
+.metrics-section:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+    margin-bottom: 0;
+}
+
+.metrics-section h2 {
+    font-size: 1.5rem;
+    color: var(--text-primary);
+    margin-bottom: 1.5rem;
+    font-weight: 700;
+}
+
+.stock-metrics {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+}
+
+.metric-card {
+    background: var(--surface-color);
+    padding: 1.5rem;
+    border-radius: 16px;
+    border: 1px solid var(--gray-200);
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    transition: all 0.3s ease;
+}
+
+.metric-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.metric-card.wide {
+    grid-column: span 2;
+}
+
+.metric-card.highlight {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    border: none;
+}
+
+.metric-card.highlight .label,
+.metric-card.highlight .value {
+    color: white;
+}
+
+.metric-icon {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.metric-card .label {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+.metric-card .value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.metric-card .value.link {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-size: 1.2rem;
+    transition: color 0.3s ease;
+}
+
+.metric-card .value.link:hover {
+    color: var(--primary-dark);
+    text-decoration: underline;
+}
+
+.metric-card.info-card {
+    background: linear-gradient(135deg, rgba(37, 99, 235, 0.1), rgba(20, 184, 166, 0.1));
+}
+
+/* Value Animations */
+@keyframes valueUpdate {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+.value-update {
+    animation: valueUpdate 0.3s ease;
+}
+
+/* Error Message */
+.error-message {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background: rgba(239, 68, 68, 0.05);
+    border: 1px solid rgba(239, 68, 68, 0.1);
+    padding: 1.5rem;
+    border-radius: 16px;
+    margin-top: 2rem;
+}
+
+.error-icon {
+    font-size: 2rem;
+}
+
+.error-content h3 {
+    color: var(--danger-color);
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+}
+
+.error-content p {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .stock-detail-page {
+        padding: 1rem;
+    }
+    
+    .stock-title {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+    
+    .price-section {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+    
+    .current-price .price {
+        font-size: 2.5rem;
+    }
+    
+    .metric-card.wide {
+        grid-column: span 1;
+    }
+}
+
 /* Footer Styles */
 footer {
     background-color: var(--white);

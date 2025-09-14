@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Details</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-content">
+            <a href="index.html" class="logo">StockTicker</a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main>
+        <div class="stock-detail-page">
+            <!-- Back button -->
+            <a href="index.html" class="back-button">
+                <span class="back-icon">←</span>
+                Back to Search
+            </a>
+
+            <div class="stock-detail-container">
+                <!-- Loading overlay -->
+                <div id="loadingOverlay" class="loading-overlay">
+                    <div class="loading-spinner"></div>
+                    <span>Loading stock data...</span>
+                </div>
+
+                <!-- Stock Header Section -->
+                <div class="stock-header-large">
+                    <div class="stock-title">
+                        <div class="title-wrapper">
+                            <h1 id="stockName">Loading...</h1>
+                            <span id="stockSymbol" class="stock-symbol-large"></span>
+                        </div>
+                        <div class="last-updated">
+                            Last Updated: <span id="lastUpdated">--</span>
+                        </div>
+                    </div>
+
+                    <div class="price-section">
+                        <div class="current-price">
+                            <span class="label">Current Price</span>
+                            <span id="currentPrice" class="price">--</span>
+                        </div>
+                        <div id="priceChange" class="price-change">
+                            <span id="changeAmount">--</span>
+                            <span id="changePercent">--</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Main Metrics Grid -->
+                <div class="metrics-section">
+                    <h2>Today's Trading Information</h2>
+                    <div class="stock-metrics">
+                        <div class="metric-card">
+                            <div class="metric-icon">📈</div>
+                            <span class="label">Open</span>
+                            <span id="openPrice" class="value">--</span>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-icon">🔄</div>
+                            <span class="label">Previous Close</span>
+                            <span id="prevClose" class="value">--</span>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-icon">⬆️</div>
+                            <span class="label">Day's High</span>
+                            <span id="dayHigh" class="value">--</span>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-icon">⬇️</div>
+                            <span class="label">Day's Low</span>
+                            <span id="dayLow" class="value">--</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Historical Metrics Section -->
+                <div class="metrics-section">
+                    <h2>Historical Performance</h2>
+                    <div class="stock-metrics">
+                        <div class="metric-card highlight">
+                            <div class="metric-icon">🏆</div>
+                            <span class="label">52 Week High</span>
+                            <span id="yearHigh" class="value">--</span>
+                        </div>
+                        <div class="metric-card highlight">
+                            <div class="metric-icon">📉</div>
+                            <span class="label">52 Week Low</span>
+                            <span id="yearLow" class="value">--</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Market Statistics Section -->
+                <div class="metrics-section">
+                    <h2>Market Statistics</h2>
+                    <div class="stock-metrics">
+                        <div class="metric-card">
+                            <div class="metric-icon">💰</div>
+                            <span class="label">Market Cap</span>
+                            <span id="marketCap" class="value">--</span>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-icon">📊</div>
+                            <span class="label">Volume</span>
+                            <span id="volume" class="value">--</span>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-icon">📈</div>
+                            <span class="label">Avg. Volume (3M)</span>
+                            <span id="averageVolume" class="value">--</span>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-icon">📉</div>
+                            <span class="label">Beta</span>
+                            <span id="beta" class="value">--</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Financial Ratios Section -->
+                <div class="metrics-section">
+                    <h2>Financial Ratios</h2>
+                    <div class="stock-metrics">
+                        <div class="metric-card">
+                            <div class="metric-icon">📊</div>
+                            <span class="label">P/E Ratio</span>
+                            <span id="peRatio" class="value">--</span>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-icon">�</div>
+                            <span class="label">EPS (TTM)</span>
+                            <span id="eps" class="value">--</span>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-icon">💎</div>
+                            <span class="label">Forward P/E</span>
+                            <span id="forwardPE" class="value">--</span>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-icon">📚</div>
+                            <span class="label">Price/Book</span>
+                            <span id="priceToBook" class="value">--</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dividend Information -->
+                <div class="metrics-section">
+                    <h2>Dividend Information</h2>
+                    <div class="stock-metrics">
+                        <div class="metric-card">
+                            <div class="metric-icon">💵</div>
+                            <span class="label">Dividend Rate</span>
+                            <span id="dividendRate" class="value">--</span>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-icon">📅</div>
+                            <span class="label">Dividend Date</span>
+                            <span id="dividendDate" class="value">--</span>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-icon">📊</div>
+                            <span class="label">Dividend Yield</span>
+                            <span id="dividendYield" class="value">--</span>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-icon">📅</div>
+                            <span class="label">Ex-Dividend Date</span>
+                            <span id="exDividendDate" class="value">--</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Additional Information -->
+                <div class="metrics-section">
+                    <h2>Additional Information</h2>
+                    <div class="stock-metrics">
+                        <div class="metric-card wide">
+                            <div class="metric-icon">🏢</div>
+                            <span class="label">Industry</span>
+                            <span id="industry" class="value">--</span>
+                        </div>
+                        <div class="metric-card wide">
+                            <div class="metric-icon">🌐</div>
+                            <span class="label">Sector</span>
+                            <span id="sector" class="value">--</span>
+                        </div>
+                        <div class="metric-card wide">
+                            <div class="metric-icon">📍</div>
+                            <span class="label">Country</span>
+                            <span id="country" class="value">--</span>
+                        </div>
+                        <div class="metric-card wide">
+                            <div class="metric-icon">🔗</div>
+                            <span class="label">Website</span>
+                            <a id="website" class="value link" href="#" target="_blank">--</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Error Message -->
+                <div id="errorMessage" class="error-message" style="display: none;">
+                    <div class="error-icon">⚠️</div>
+                    <div class="error-content">
+                        <h3>Error Loading Data</h3>
+                        <p>Failed to load stock data. Please try again later.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="js/stockDetails.js"></script>
+</body>
+</html>
