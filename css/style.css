@@ -202,7 +202,7 @@ main {
 .search-container {
     text-align: center;
     margin: var(--space-xl) auto var(--space-2xl);
-    padding: 0;
+    padding: var(--space-xl);
     border-radius: 0;
     background: transparent;
     position: relative;
@@ -214,8 +214,8 @@ main {
 
 
 .search-container h1 {
-    font-size: var(--text-3xl);
-    margin-bottom: var(--space-lg);
+    font-size: 2.5rem;
+    margin-bottom: var(--space-2xl);
     color: var(--text-primary);
     font-weight: 800;
     position: relative;
@@ -225,12 +225,12 @@ main {
     max-width: 600px;
     margin: 0 auto;
     background: transparent;
-    padding: var(--space-lg);
+    padding: var(--space-xl);
     border-radius: 0;
     backdrop-filter: none;
     border: none;
     box-shadow: none;
-    margin-bottom: var(--space-lg);
+    margin-bottom: var(--space-xl);
     position: relative;
     z-index: 2;
 }
@@ -246,10 +246,10 @@ main {
 
 #stockSearch {
     width: 100%;
-    padding: var(--space-md) var(--space-lg) var(--space-md) 2.5rem;
+    padding: var(--space-lg) var(--space-xl) var(--space-lg) 3rem;
     border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: var(--radius-sm);
-    font-size: var(--text-base);
+    border-radius: var(--radius-md);
+    font-size: var(--text-lg);
     background: rgba(255, 255, 255, 0.95);
     color: var(--text-primary);
     outline: none;
@@ -261,10 +261,10 @@ main {
 .search-input-wrapper::before {
     content: '🔍';
     position: absolute;
-    left: var(--space-md);
+    left: var(--space-lg);
     top: 50%;
     transform: translateY(-50%);
-    font-size: var(--text-base);
+    font-size: var(--text-lg);
     z-index: 2;
     pointer-events: none;
     opacity: 0.7;
@@ -381,7 +381,7 @@ main {
 .stock-tag {
     display: inline-flex;
     align-items: center;
-    padding: var(--space-sm) var(--space-md);
+    padding: var(--space-md) var(--space-xl);
     background-color: var(--surface-color);
     border: none;
     border-radius: var(--radius-sm);
@@ -389,7 +389,7 @@ main {
     transition: all 0.2s ease;
     font-weight: 500;
     color: var(--text-color);
-    font-size: var(--text-sm);
+    font-size: var(--text-base);
 }
 
 .stock-tag:hover {
