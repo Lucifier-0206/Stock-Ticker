@@ -34,75 +34,80 @@
                     <span class="loading-subtext">Please wait while we fetch the latest information</span>
                 </div>
 
-                <header class="stock-header-large">
-                    <div class="stock-title">
-                        <div class="title-wrapper">
-                            <h1 id="stockName">Loading...</h1>
-                            <span id="stockSymbol" class="stock-symbol-large"></span>
-                            <span id="exchangeName" class="exchange-name"></span>
-                        </div>
-                        <div class="last-updated">
-                            Last Updated: <time id="lastUpdated">--</time>
+                <header class="stock-header-clean">
+                    <div class="stock-title-section">
+                        <h1 id="stockName">Loading...</h1>
+                        <div class="stock-badges">
+                            <span id="stockSymbol" class="symbol-badge"></span>
+                            <span id="exchangeName" class="exchange-badge"></span>
+                            <div class="last-update">
+                                <span>Last updated: </span>
+                                <time id="lastUpdated">--</time>
+                            </div>
                         </div>
                     </div>
-
-                    <div class="price-section">
-                        <div class="current-price">
-                            <span class="label" id="price-label">Current Price</span>
-                            <span id="currentPrice" class="price">--</span>
-                        </div>
-                        <div id="priceChange" class="price-change">
-                            <span class="amount" id="price-change-info">
-                                <span id="changeDirection"></span>
-                                <span id="changeAmount">--</span>
-                            </span>
-                            <span class="separator">|</span>
-                            <span class="percent">
-                                <span id="changePercent">--</span>
-                            </span>
+                    
+                    <div class="price-section-clean">
+                        <div class="price-main-display">
+                            <span id="currentPrice" class="main-price">--</span>
+                            <div class="inline-price-change">
+                                <span id="changeDirection" class="direction-arrow"></span>
+                                <span id="changeAmount" class="amount">--</span>
+                                <span id="changePercent" class="percentage">--</span>
+                            </div>
                         </div>
                     </div>
                 </header>
                 
-                <section class="metrics-section trading-info">
-                    <header class="section-header">
-                        <h2 id="trading-heading">Today's Trading Information</h2>
-                        <span class="section-subtitle">Key metrics for today's trading session</span>
-                    </header>
-                    <div id="tradingMetrics" class="stock-metrics">
-                        <!-- Trading metrics will be inserted here dynamically -->
-                    </div>
-                </section>
-
-                <section class="expandable-section">
-                    <header class="expandable-header" tabindex="0">
-                        <h2 id="market-stats-heading">Market Statistics</h2>
-                        <div class="expandable-toggle">▼</div>
-                    </header>
-                    <div id="market-stats-content" class="expandable-content">
-                        <div class="expandable-content-inner">
-                            <div class="stock-metrics">
-                                <article class="metric-card interactive">
-                                    <div class="metric-icon">💎</div>
-                                    <span class="label">Market Cap</span>
-                                    <span id="marketCapAlt" class="value">--</span>
-                                </article>
-                                <article class="metric-card interactive">
-                                    <div class="metric-icon">📈</div>
-                                    <span class="label">Volume</span>
-                                    <span id="volume" class="value">--</span>
-                                </article>
-                                <article class="metric-card interactive">
-                                    <div class="metric-icon">📊</div>
-                                    <span class="label">Avg. Volume (3M)</span>
-                                    <span id="averageVolumeAlt" class="value">--</span>
-                                </article>
-                                <article class="metric-card interactive">
-                                    <div class="metric-icon">📉</div>
-                                    <span class="label">Beta</span>
-                                    <span id="beta" class="value">--</span>
-                                </article>
-                            </div>
+                <section class="metrics-container">
+                    <div class="metrics-grid-simple">
+                        <div class="metric-card-simple">
+                            <div class="metric-label">Open</div>
+                            <div id="openPrice" class="metric-value">--</div>
+                        </div>
+                        <div class="metric-card-simple">
+                            <div class="metric-label">Previous Close</div>
+                            <div id="prevClose" class="metric-value">--</div>
+                        </div>
+                        <div class="metric-card-simple">
+                            <div class="metric-label">Day High</div>
+                            <div id="dayHigh" class="metric-value">--</div>
+                        </div>
+                        <div class="metric-card-simple">
+                            <div class="metric-label">Day Low</div>
+                            <div id="dayLow" class="metric-value">--</div>
+                        </div>
+                        <div class="metric-card-simple">
+                            <div class="metric-label">Volume</div>
+                            <div id="volume" class="metric-value">--</div>
+                        </div>
+                        <div class="metric-card-simple">
+                            <div class="metric-label">Market Cap</div>
+                            <div id="marketCap" class="metric-value">--</div>
+                        </div>
+                        <div class="metric-card-simple important">
+                            <div class="metric-label">52W High</div>
+                            <div id="yearHigh" class="metric-value">--</div>
+                        </div>
+                        <div class="metric-card-simple important">
+                            <div class="metric-label">52W Low</div>
+                            <div id="yearLow" class="metric-value">--</div>
+                        </div>
+                        <div class="metric-card-simple">
+                            <div class="metric-label">P/E Ratio</div>
+                            <div id="peRatio" class="metric-value">--</div>
+                        </div>
+                        <div class="metric-card-simple">
+                            <div class="metric-label">EPS</div>
+                            <div id="eps" class="metric-value">--</div>
+                        </div>
+                        <div class="metric-card-simple">
+                            <div class="metric-label">Dividend Yield</div>
+                            <div id="dividendYield" class="metric-value">--</div>
+                        </div>
+                        <div class="metric-card-simple">
+                            <div class="metric-label">Beta</div>
+                            <div id="beta" class="metric-value">--</div>
                         </div>
                     </div>
                 </section>

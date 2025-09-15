@@ -103,20 +103,33 @@ async function fetchStockDetails(symbol) {
         
         const meta = {
             symbol: formattedSymbol,
-            symbol: formattedSymbol,
+            longName: chartMeta.longName,
+            shortName: chartMeta.shortName,
             regularMarketPrice: chartMeta.regularMarketPrice,
             regularMarketChange: chartMeta.regularMarketPrice - chartMeta.previousClose,
             regularMarketChangePercent: ((chartMeta.regularMarketPrice - chartMeta.previousClose) / chartMeta.previousClose) * 100,
             regularMarketTime: chartMeta.regularMarketTime,
-            regularMarketOpen: chartMeta.chartPreviousClose,
+            regularMarketOpen: chartMeta.regularMarketOpen || chartMeta.chartPreviousClose,
             previousClose: chartMeta.previousClose,
             regularMarketDayHigh: Math.max(...quote.high.filter(h => h !== null)),
             regularMarketDayLow: Math.min(...quote.low.filter(l => l !== null)),
             regularMarketVolume: quote.volume[quote.volume.length - 1],
-            currency: chartMeta.currency,
+            currency: chartMeta.currency || 'INR',
             exchangeName: chartMeta.exchangeName,
             instrumentType: chartMeta.instrumentType,
-            priceHint: chartMeta.priceHint
+            priceHint: chartMeta.priceHint,
+            // Additional financial metrics
+            marketCap: chartMeta.marketCap,
+            trailingPE: chartMeta.trailingPE,
+            forwardPE: chartMeta.forwardPE,
+            priceToBook: chartMeta.priceToBook,
+            eps: chartMeta.epsTrailingTwelveMonths,
+            beta: chartMeta.beta,
+            dividendRate: chartMeta.dividendRate,
+            dividendYield: chartMeta.dividendYield,
+            fiftyTwoWeekHigh: chartMeta.fiftyTwoWeekHigh,
+            fiftyTwoWeekLow: chartMeta.fiftyTwoWeekLow,
+            averageDailyVolume3Month: chartMeta.averageDailyVolume3Month
         };
 
         // Ensure we have price change data
@@ -148,32 +161,28 @@ function updateUI(stockData, quote, meta) {
 
         const safeDate = (timestamp) => {
             if (!timestamp) return '--';
-            // If timestamp is in seconds (Unix timestamp), convert to milliseconds
             const date = new Date(timestamp * (timestamp < 10000000000 ? 1000 : 1));
             return date.toLocaleDateString('en-IN');
         };
 
-        const updateElement = (id, value, prefix = '', animationDelay = 0) => {
+        const updateElement = (id, value, animationDelay = 0) => {
             const element = document.getElementById(id);
             if (element) {
-                element.style.opacity = '0';
-                element.textContent = value ? `${prefix}${value}` : '--';
-                setTimeout(() => {
-                    element.style.opacity = '1';
-                    element.classList.add('value-update');
-                    setTimeout(() => element.classList.remove('value-update'), 300);
-                }, animationDelay);
+                element.textContent = value || '--';
+                element.classList.add('value-update');
+                setTimeout(() => element.classList.remove('value-update'), 300);
+            } else {
+                console.warn(`Element with id '${id}' not found`);
             }
         };
 
         // Update basic info
         const stockName = meta.longName || meta.shortName || meta.symbol?.replace('.NS', '') || 'Stock Details';
-        const exchangeInfo = meta.fullExchangeName || meta.exchangeName || 'NSE';
+        const exchangeInfo = meta.exchangeName || 'NSE';
         
         document.getElementById('stockName').textContent = stockName;
         document.getElementById('stockSymbol').textContent = meta.symbol?.replace('.NS', '') || '--';
         
-        // Add exchange name if element exists
         const exchangeElement = document.getElementById('exchangeName');
         if (exchangeElement) {
             exchangeElement.textContent = exchangeInfo;
@@ -185,8 +194,9 @@ function updateUI(stockData, quote, meta) {
         const lastUpdated = new Date(meta.regularMarketTime * 1000).toLocaleString('en-IN', {
             hour: '2-digit',
             minute: '2-digit',
-            second: '2-digit',
-            hour12: true
+            hour12: true,
+            day: '2-digit',
+            month: 'short'
         });
         document.getElementById('lastUpdated').textContent = lastUpdated;
 
@@ -198,10 +208,9 @@ function updateUI(stockData, quote, meta) {
 
         updateElement('currentPrice', safeNumber(currentPrice));
         
-        const changeElement = document.getElementById('priceChange');
+        const inlineChangeElement = document.querySelector('.inline-price-change');
         const changeAmountElement = document.getElementById('changeAmount');
         const changePercentElement = document.getElementById('changePercent');
-        
         const changeDirectionElement = document.getElementById('changeDirection');
 
         if (currentPrice && previousClose) {
@@ -211,183 +220,37 @@ function updateUI(stockData, quote, meta) {
             
             changeDirectionElement.textContent = changeDirection;
             changeAmountElement.textContent = `${sign}₹${Math.abs(priceChange).toFixed(2)}`;
-            changePercentElement.textContent = `${sign}${Math.abs(changePercent).toFixed(2)}%`;
+            changePercentElement.textContent = `(${sign}${Math.abs(changePercent).toFixed(2)}%)`;
             
-            changeElement.className = `price-change ${isPositive ? 'positive' : 'negative'}`;
+            // Apply color to the entire inline price change container
+            const colorClass = isPositive ? 'positive' : 'negative';
+            if (inlineChangeElement) {
+                inlineChangeElement.className = `inline-price-change ${colorClass}`;
+            }
         } else {
             changeDirectionElement.textContent = '--';
             changeAmountElement.textContent = '--';
             changePercentElement.textContent = '--';
-            changeElement.className = 'price-change';
-        }
-
-        // Trading Information with improved metrics
-        const tradingMetrics = [
-            {
-                id: 'openPrice',
-                icon: '📈',
-                value: meta.regularMarketOpen,
-                percentage: meta.previousClose ? ((meta.regularMarketOpen - meta.previousClose) / meta.previousClose) * 100 : null,
-                label: 'Open Price',
-                tooltip: 'Today\'s opening price'
-            },
-            {
-                id: 'prevClose',
-                icon: '🔄',
-                value: meta.previousClose,
-                label: 'Previous Close',
-                tooltip: 'Yesterday\'s closing price'
-            },
-            {
-                id: 'dayHigh',
-                icon: '⬆️',
-                value: meta.regularMarketDayHigh,
-                percentage: meta.previousClose ? ((meta.regularMarketDayHigh - meta.previousClose) / meta.previousClose) * 100 : null,
-                label: 'Day High',
-                tooltip: 'Highest price today'
-            },
-            {
-                id: 'dayLow',
-                icon: '⬇️',
-                value: meta.regularMarketDayLow,
-                percentage: meta.previousClose ? ((meta.regularMarketDayLow - meta.previousClose) / meta.previousClose) * 100 : null,
-                label: 'Day Low',
-                tooltip: 'Lowest price today'
-            },
-            {
-                id: 'volume',
-                icon: '📊',
-                value: meta.regularMarketVolume,
-                label: 'Volume',
-                tooltip: 'Number of shares traded today'
-            },
-            {
-                id: 'yearHigh',
-                icon: '🏆',
-                value: meta.fiftyTwoWeekHigh,
-                percentage: meta.regularMarketPrice ? ((meta.fiftyTwoWeekHigh - meta.regularMarketPrice) / meta.regularMarketPrice) * 100 : null,
-                label: '52-Week High',
-                tooltip: 'Highest price in the last year'
-            },
-            {
-                id: 'yearLow',
-                icon: '📉',
-                value: meta.fiftyTwoWeekLow,
-                percentage: meta.regularMarketPrice ? ((meta.regularMarketPrice - meta.fiftyTwoWeekLow) / meta.fiftyTwoWeekLow) * 100 : null,
-                label: '52-Week Low',
-                tooltip: 'Lowest price in the last year'
+            if (inlineChangeElement) {
+                inlineChangeElement.className = 'inline-price-change';
             }
-        ];
-
-        // Create metric cards container if it doesn't exist
-        const metricsContainer = document.getElementById('tradingMetrics') || (() => {
-            const container = document.createElement('div');
-            container.id = 'tradingMetrics';
-            container.className = 'metrics-row';
-            const tradingSection = document.querySelector('.metrics-section:first-of-type .stock-metrics');
-            tradingSection.appendChild(container);
-            return container;
-        })();
-
-        // Clear existing metrics
-        metricsContainer.innerHTML = '';
-
-        // Create metric cards
-        tradingMetrics.forEach((metric, index) => {
-            const metricCard = document.createElement('div');
-            metricCard.className = 'metric-card';
-            metricCard.id = `${metric.id}-card`;
-            metricCard.title = metric.tooltip;
-
-            const icon = document.createElement('div');
-            icon.className = 'metric-icon';
-            icon.textContent = metric.icon;
-            metricCard.appendChild(icon);
-
-            const label = document.createElement('div');
-            label.className = 'label';
-            label.textContent = metric.label;
-            metricCard.appendChild(label);
-
-            const valueContainer = document.createElement('div');
-            valueContainer.className = 'value-container';
-            
-            const value = document.createElement('div');
-            value.className = 'value';
-            value.textContent = safeNumber(metric.value);
-            valueContainer.appendChild(value);
-
-            if (metric.percentage !== null && metric.percentage !== undefined) {
-                const percentage = document.createElement('div');
-                percentage.className = 'metric-percentage';
-                const percentageValue = metric.percentage;
-                const sign = percentageValue >= 0 ? '+' : '';
-                percentage.textContent = `${sign}${percentageValue.toFixed(2)}%`;
-                percentage.classList.add(percentageValue >= 0 ? 'positive' : 'negative');
-                valueContainer.appendChild(percentage);
-            }
-
-            metricCard.appendChild(valueContainer);
-
-            metricsContainer.appendChild(metricCard);
-        });
-
-        // Market Statistics (only if elements exist)
-        const marketCapElement = document.getElementById('marketCap');
-        if (marketCapElement) {
-            updateElement('marketCap', formatLargeNumber(meta.marketCap));
-        }
-        const volumeElement = document.getElementById('volume');
-        if (volumeElement) {
-            updateElement('volume', formatLargeNumber(meta.regularMarketVolume));
-        }
-        const averageVolumeElement = document.getElementById('averageVolume');
-        if (averageVolumeElement) {
-            updateElement('averageVolume', formatLargeNumber(meta.averageDailyVolume3Month));
-        }
-        const betaElement = document.getElementById('beta');
-        if (betaElement) {
-            updateElement('beta', meta.beta?.toFixed(2));
         }
 
-        // Financial Ratios
-        updateElement('peRatio', meta.trailingPE?.toFixed(2));
-        updateElement('forwardPE', meta.forwardPE?.toFixed(2));
-        updateElement('marketCapAlt', formatLargeNumber(meta.marketCap));
-        updateElement('currency', meta.currency || 'INR');
-
-        // Update additional info
-        updateElement('longName', meta.longName || meta.shortName);
-        updateElement('industry', meta.industry || '--');
-        updateElement('sector', meta.sector || '--');
-
-        // Dividend Information
-        if (meta.dividendRate || meta.dividendYield) {
-            updateElement('dividendRate', safeNumber(meta.dividendRate, '₹'));
-            updateElement('dividendYield', meta.dividendYield ? `${(meta.dividendYield * 100).toFixed(2)}%` : '--');
-            updateElement('dividendDate', safeDate(meta.dividendDate));
-            updateElement('exDividendDate', safeDate(meta.exDividendDate));
-        }
-
-        // Additional Information
-        const additionalInfo = {
-            industry: meta.industry,
-            sector: meta.sector,
-            country: meta.country,
-            website: meta.website
-        };
-
-        Object.entries(additionalInfo).forEach(([key, value]) => {
-            const element = document.getElementById(key);
-            if (element) {
-                if (key === 'website' && value) {
-                    element.href = value;
-                    element.textContent = new URL(value).hostname;
-                } else {
-                    element.textContent = value || '--';
-                }
-            }
-        });
+        // Update individual metric elements
+        updateElement('openPrice', safeNumber(meta.regularMarketOpen));
+        updateElement('prevClose', safeNumber(meta.previousClose));
+        updateElement('dayHigh', safeNumber(meta.regularMarketDayHigh));
+        updateElement('dayLow', safeNumber(meta.regularMarketDayLow));
+        updateElement('volume', formatVolume(meta.regularMarketVolume));
+        updateElement('marketCap', formatLargeNumber(meta.marketCap));
+        updateElement('yearHigh', safeNumber(meta.fiftyTwoWeekHigh));
+        updateElement('yearLow', safeNumber(meta.fiftyTwoWeekLow));
+        
+        // Financial ratios
+        updateElement('peRatio', meta.trailingPE ? meta.trailingPE.toFixed(2) : '--');
+        updateElement('eps', safeNumber(meta.eps));
+        updateElement('dividendYield', meta.dividendYield ? `${(meta.dividendYield * 100).toFixed(2)}%` : '--');
+        updateElement('beta', meta.beta ? meta.beta.toFixed(2) : '--');
 
     } catch (error) {
         console.error('Error updating UI:', error);
