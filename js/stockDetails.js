@@ -101,10 +101,15 @@ async function fetchStockDetails(symbol) {
         const quote = chart.indicators.quote[0];
         const chartMeta = chart.meta;
         
+        console.log('=== AVAILABLE API DATA ===');
+        console.log('Chart Meta Keys:', Object.keys(chartMeta));
+        console.log('Chart Meta Full Object:', chartMeta);
+        console.log('Quote Keys:', Object.keys(quote));
+        console.log('Quote Full Object:', quote);
+        console.log('========================');
+        
         const meta = {
             symbol: formattedSymbol,
-            longName: chartMeta.longName,
-            shortName: chartMeta.shortName,
             regularMarketPrice: chartMeta.regularMarketPrice,
             regularMarketChange: chartMeta.regularMarketPrice - chartMeta.previousClose,
             regularMarketChangePercent: ((chartMeta.regularMarketPrice - chartMeta.previousClose) / chartMeta.previousClose) * 100,
@@ -113,23 +118,29 @@ async function fetchStockDetails(symbol) {
             previousClose: chartMeta.previousClose,
             regularMarketDayHigh: Math.max(...quote.high.filter(h => h !== null)),
             regularMarketDayLow: Math.min(...quote.low.filter(l => l !== null)),
-            regularMarketVolume: quote.volume[quote.volume.length - 1],
+            regularMarketVolume: chartMeta.regularMarketVolume || quote.volume[quote.volume.length - 1] || quote.volume.reduce((a, b) => a + (b || 0), 0),
             currency: chartMeta.currency || 'INR',
             exchangeName: chartMeta.exchangeName,
+            fullExchangeName: chartMeta.fullExchangeName,
             instrumentType: chartMeta.instrumentType,
             priceHint: chartMeta.priceHint,
-            // Additional financial metrics
             marketCap: chartMeta.marketCap,
-            trailingPE: chartMeta.trailingPE,
-            forwardPE: chartMeta.forwardPE,
-            priceToBook: chartMeta.priceToBook,
-            eps: chartMeta.epsTrailingTwelveMonths,
-            beta: chartMeta.beta,
-            dividendRate: chartMeta.dividendRate,
-            dividendYield: chartMeta.dividendYield,
             fiftyTwoWeekHigh: chartMeta.fiftyTwoWeekHigh,
             fiftyTwoWeekLow: chartMeta.fiftyTwoWeekLow,
-            averageDailyVolume3Month: chartMeta.averageDailyVolume3Month
+            averageDailyVolume3Month: chartMeta.averageDailyVolume3Month,
+            // Additional fields that might be available
+            longName: chartMeta.longName,
+            shortName: chartMeta.shortName,
+            displayName: chartMeta.displayName,
+            timezone: chartMeta.timezone,
+            gmtOffSetMilliseconds: chartMeta.gmtOffSetMilliseconds,
+            currentTradingPeriod: chartMeta.currentTradingPeriod,
+            tradingPeriods: chartMeta.tradingPeriods,
+            dataGranularity: chartMeta.dataGranularity,
+            range: chartMeta.range,
+            validRanges: chartMeta.validRanges,
+            scale: chartMeta.scale,
+            chartPreviousClose: chartMeta.chartPreviousClose
         };
 
         // Ensure we have price change data
@@ -237,6 +248,7 @@ function updateUI(stockData, quote, meta) {
         }
 
         // Update individual metric elements
+        console.log('Volume data being processed:', meta.regularMarketVolume);
         updateElement('openPrice', safeNumber(meta.regularMarketOpen));
         updateElement('prevClose', safeNumber(meta.previousClose));
         updateElement('dayHigh', safeNumber(meta.regularMarketDayHigh));

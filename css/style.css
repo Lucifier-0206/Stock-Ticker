@@ -61,13 +61,14 @@
 }
 
 body {
-    background-color: var(--background-color);
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
     color: var(--text-primary);
     line-height: 1.6;
     font-size: var(--text-base);
     letter-spacing: -0.01em;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    min-height: 100vh;
 }
 
 /* Enhanced heading hierarchy */
@@ -129,11 +130,11 @@ p {
     top: 0;
     left: 0;
     width: 100%;
-    background-color: var(--surface-color);
-    box-shadow: var(--shadow-md);
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px);
+    box-shadow: 0 1px 20px rgba(0, 0, 0, 0.08);
     z-index: 1000;
-    backdrop-filter: blur(10px);
-    background-color: rgba(255, 255, 255, 0.9);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.8);
 }
 
 .nav-content {
@@ -203,13 +204,16 @@ main {
 .search-container {
     text-align: center;
     margin: var(--space-xl) auto var(--space-2xl);
-    padding: var(--space-xl);
-    border-radius: 0;
-    background: transparent;
+    padding: var(--space-2xl) var(--space-xl);
+    border-radius: var(--radius-xl);
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.8);
     position: relative;
     max-width: 900px;
     isolation: isolate;
     z-index: 0;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 
@@ -217,9 +221,13 @@ main {
 .search-container h1 {
     font-size: 2.5rem;
     margin-bottom: var(--space-2xl);
-    color: var(--text-primary);
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
     font-weight: 800;
     position: relative;
+    line-height: 1.1;
 }
 
 .search-box {
@@ -248,15 +256,27 @@ main {
 #stockSearch {
     width: 100%;
     padding: var(--space-lg) var(--space-xl) var(--space-lg) 3rem;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: var(--radius-md);
+    border: 1px solid var(--gray-300);
+    border-radius: var(--radius-lg);
     font-size: var(--text-lg);
-    background: rgba(255, 255, 255, 0.95);
+    background: var(--surface-color);
     color: var(--text-primary);
     outline: none;
-    transition: all 0.2s ease;
-    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1), inset 0 1px 2px rgba(0, 0, 0, 0.05);
     position: relative;
+}
+
+#stockSearch:focus {
+    border-color: var(--primary-color);
+    box-shadow: 
+        0 0 0 3px rgba(37, 99, 235, 0.1),
+        0 4px 12px rgba(0, 0, 0, 0.1);
+    transform: translateY(-1px);
+}
+
+#stockSearch::placeholder {
+    color: var(--gray-400);
 }
 
 .search-input-wrapper::before {
@@ -268,7 +288,13 @@ main {
     font-size: var(--text-lg);
     z-index: 2;
     pointer-events: none;
-    opacity: 0.7;
+    opacity: 0.6;
+    transition: opacity 0.3s ease;
+}
+
+.search-input-wrapper:focus-within::before {
+    opacity: 0.8;
+    color: var(--primary-color);
 }
 
 .search-suggestions {
@@ -363,16 +389,16 @@ main {
 }
 
 .example-stocks {
-    margin-top: 1rem;
+    margin-top: var(--space-xl);
     text-align: center;
     display: flex;
     flex-wrap: wrap;
-    gap: 0.75rem;
+    gap: var(--space-md);
     justify-content: center;
-    padding: 0 1rem;
+    padding: var(--space-lg) var(--space-lg) 0;
     position: relative;
-    z-index: 1; /* Lower than search-box */
-    pointer-events: none; /* Make it ignore mouse events when covered */
+    z-index: 1;
+    pointer-events: none;
 }
 
 .stock-tag {
@@ -384,19 +410,28 @@ main {
     align-items: center;
     padding: var(--space-md) var(--space-xl);
     background-color: var(--surface-color);
-    border: none;
-    border-radius: var(--radius-sm);
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius-md);
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     font-weight: 500;
     color: var(--text-color);
     font-size: var(--text-base);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06);
+    position: relative;
 }
 
 .stock-tag:hover {
-    background-color: rgba(37, 99, 235, 0.03);
-    color: var(--primary-color);
+    background-color: var(--primary-color);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.15), 0 2px 4px rgba(37, 99, 235, 0.1);
+    border-color: var(--primary-color);
+}
+
+.stock-tag:active {
     transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(37, 99, 235, 0.2);
 }
 
 /* Search Suggestions Styles */
